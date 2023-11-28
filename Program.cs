@@ -5,7 +5,7 @@ new Product()
 {
 Name = "Football",
 Price = 15.00M,
-Sold = false,
+SoldOnDate = null,
 StockDate = new DateTime(2022, 10 ,20),
 ManufacturerYear = 2010,
 Condition = 4.2
@@ -14,7 +14,7 @@ new Product()
 {
 Name = "Hockey Stick",
 Price = 12.99M,
-Sold = false,
+SoldOnDate = new DateTime(2023, 11, 20),
 StockDate = new DateTime(2023, 1, 14),
 ManufacturerYear = 2020,
 Condition = 2.5
@@ -23,7 +23,7 @@ new Product()
 {
 Name = "Boomerang",
 Price = 7.50M,
-Sold = false,
+SoldOnDate = null,
 StockDate = new DateTime(2021, 3, 29),
 ManufacturerYear = 2012,
 Condition = 3
@@ -32,7 +32,7 @@ new Product()
 {
 Name = "Frisbee",
 Price = 10.99M,
-Sold = false,
+SoldOnDate = null,
 StockDate = new DateTime(2023, 11, 12),
 ManufacturerYear = 2023,
 Condition = 5
@@ -41,7 +41,7 @@ new Product()
 {
 Name = "Golf Putter",
 Price = 23.75M,
-Sold = true,
+SoldOnDate = new DateTime(2023, 11, 28),
 StockDate = new DateTime(2003, 1, 10),
 ManufacturerYear = 1999,
 Condition = 4.9
@@ -50,7 +50,7 @@ new Product()
 {
 Name = "Tennis Balls",
 Price = 5.60M,
-Sold = false,
+SoldOnDate = null,
 StockDate = new DateTime(2020, 7, 16),
 ManufacturerYear = 2014,
 Condition = 3.6
@@ -59,7 +59,7 @@ new Product()
 {
 Name = "Basketball",
 Price = 20.00M,
-Sold = false,
+SoldOnDate = null,
 StockDate = new DateTime(2023, 9, 10),
 ManufacturerYear = 2021,
 Condition = 4.5
@@ -68,7 +68,7 @@ new Product()
 {
 Name = "Badminton Racket",
 Price = 18.50M,
-Sold = false,
+SoldOnDate = null,
 StockDate = new DateTime(2023, 9, 25),
 ManufacturerYear = 2022,
 Condition = 4.8
@@ -77,7 +77,7 @@ new Product()
 {
 Name = "Volleyball",
 Price = 16.00M,
-Sold = false,
+SoldOnDate = new DateTime(2023, 10, 5),
 StockDate = new DateTime(2023, 10, 1),
 ManufacturerYear = 2023,
 Condition = 4.7
@@ -146,12 +146,10 @@ void ViewProductDetails()
         }
     }
 
-    TimeSpan timeInStock = now - chosenProduct.StockDate;
-
     Console.WriteLine(@$"You chose: 
 {chosenProduct.Name}, which costs {chosenProduct.Price} dollars.
 It is {now.Year - chosenProduct.ManufacturerYear} years old.
-It {(chosenProduct.Sold ? "is not available." : $"has been in stock for {timeInStock.Days} days.")}");
+It has been on the shelf for {chosenProduct.TimeInStock.Days} days.");
 }
 
 void ListProducts()
@@ -159,7 +157,7 @@ void ListProducts()
     decimal totalValue = 0.0M;
     foreach (Product product in products)
     {
-        if (!product.Sold)
+        if (product.SoldOnDate != null)
         {
             totalValue += product.Price;
         }
@@ -182,7 +180,7 @@ void ViewLatestProducts()
     foreach (Product product in products)
     {
         // Add a product to latestProducts if it fits the criteria
-        if (product.StockDate > threeMonthsAgo && !product.Sold)
+        if (product.StockDate > threeMonthsAgo && product.SoldOnDate == null)
         {
             latestProducts.Add(product);
         }
