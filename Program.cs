@@ -23,7 +23,7 @@ new Product()
 {
 Name = "Boomerang",
 Price = 7.50M,
-SoldOnDate = null,
+SoldOnDate = new DateTime(2023, 11, 9),
 StockDate = new DateTime(2021, 3, 29),
 ManufacturerYear = 2012,
 Condition = 3
@@ -50,7 +50,7 @@ new Product()
 {
 Name = "Tennis Balls",
 Price = 5.60M,
-SoldOnDate = null,
+SoldOnDate = new DateTime(2023, 11, 15),
 StockDate = new DateTime(2020, 7, 16),
 ManufacturerYear = 2014,
 Condition = 3.6
@@ -97,7 +97,8 @@ while (choice != "0")
 0. Exit
 1. View All Products
 2. View Product Details
-3. View Latest Products");
+3. View Latest Products
+4. View Montly Sales Report");
     choice = Console.ReadLine();
     if (choice == "0")
     {
@@ -114,6 +115,10 @@ while (choice != "0")
     else if (choice == "3")
     {
         ViewLatestProducts();
+    }
+    else if (choice == "4")
+    {
+        MonthlySalesReport();
     }
 }
 
@@ -191,4 +196,34 @@ void ViewLatestProducts()
     {
         Console.WriteLine($"{i + 1}. {latestProducts[i].Name}");
     }
+}
+
+void MonthlySalesReport()
+{
+    string userinput = null;
+    int Month = 0;
+    int Year = 0;
+    decimal Sales = 0.00M;
+
+    Console.WriteLine(@$"Please provide a month and year to view the sales report for that month:
+    ");
+    Console.Write("Month: ");
+    Month = int.Parse(Console.ReadLine().Trim());
+    Console.Write("Year: ");
+    Year = int.Parse(Console.ReadLine().Trim());
+    
+    DateTime selection = new DateTime(Year, Month, 1);
+
+    var productsFromSelection = products.Where(product =>
+        product.SoldOnDate.HasValue &&
+        product.SoldOnDate.Value.Year == selection.Year &&
+        product.SoldOnDate.Value.Month == selection.Month
+    ).ToList();
+
+    foreach (Product product in productsFromSelection)
+    {
+        Console.WriteLine(@$"{product.Name} was sold for {product.Price}.");
+        Sales += product.Price;
+    }
+    Console.WriteLine(@$"Durring the selected month, the total sales were valued at: {Sales}");
 }
